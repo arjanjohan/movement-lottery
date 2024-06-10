@@ -1,0 +1,15 @@
+[package]
+name = "lottery"
+version = "1.0.0"
+authors = ["arjanjohan"]
+
+[addresses]
+lottery_addr="509a53ac2be5e7ab02ad1ca467f1960c6077450870cfee55bfe13235fbaad3c0"
+
+[dev-addresses]
+
+[dependencies]
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", rev = "main", subdir = "aptos-move/framework/aptos-framework" }
+MoveStdlib = { git = "https://github.com/aptos-labs/aptos-core.git", rev = "mainnet" , subdir = "aptos-move/framework/move-stdlib"}
+
+[dev-dependencies]

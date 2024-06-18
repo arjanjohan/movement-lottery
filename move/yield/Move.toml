@@ -4,6 +4,7 @@ version = "1.0.0"
 authors = []
 
 [addresses]
+yield_addr="509a53ac2be5e7ab02ad1ca467f1960c6077450870cfee55bfe13235fbaad3c0"
 
 [dev-addresses]
 

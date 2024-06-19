@@ -1,6 +1,6 @@
 <div align="center">
   <h1 align="center">🎰 WinWin Lottery on Movement</h1>
-  <a href="">Website</a> |
+  <a href="TODO">Website</a> |
   <a href="https://github.com/arjanjohan/move-lottery">Repo</a>
 </h4>
   
@@ -49,19 +49,16 @@ Lets any user deposit tokens into the contract. The blocknumber and amount is re
 #### Withdraw
 Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal.
 
-## Next steps
-
-
+<!-- ## Next steps
+ -->
 
 ## Links
 
-- [Vercel]()
+- [Vercel](TODO)
 - [Github](https://github.com/arjanjohan/move-lottery)
-- [Deployed Lottery contract]()
-- [Deployed Yield contract]()
+- [Deployed Lottery contract](TODO)
+- [Deployed Yield contract](TODO)
 
 ## Team
-
-This project is made by:
 
 - [arjanjohan](https://x.com/arjanjohan/)

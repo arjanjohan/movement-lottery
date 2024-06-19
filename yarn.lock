@@ -160,7 +160,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aptos-labs/ts-sdk@npm:^1.9.1":
+"@aptos-labs/ts-sdk@npm:^1.19.0, @aptos-labs/ts-sdk@npm:^1.9.1":
   version: 1.19.0
   resolution: "@aptos-labs/ts-sdk@npm:1.19.0"
   dependencies:
@@ -10386,6 +10386,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
+    "@aptos-labs/ts-sdk": ^1.19.0
     "@aptos-labs/wallet-adapter-ant-design": ^2.4.11
     "@aptos-labs/wallet-adapter-react": ^3.3.0
     aptos: ^1.21.0

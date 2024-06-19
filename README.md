@@ -49,15 +49,24 @@ Lets any user deposit tokens into the contract. The blocknumber and amount is re
 #### Withdraw
 Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal.
 
-<!-- ## Next steps
- -->
+## Next steps
+- Connect NextJS with M1 Movement
+- Create page to interact with lottery
+  - Buy tickets
+  - Display user tickets
+  - Display results (for user)
+  - Display totals (amount + time + maybe addresses playing)
+- Connext Lottery with Yield contract
+- Create AVS 
+
+- Continue building a scaffold-eth like repo for Move to use with Movement Labs.
 
 ## Links
 
 - [Vercel](TODO)
 - [Github](https://github.com/arjanjohan/move-lottery)
 - [Deployed Lottery contract](TODO)
-- [Deployed Yield contract](TODO)
+- [Deployed Yield contract](https://explorer.devnet.m1.movementlabs.xyz/account/0xdf921eb55ba53511bfe3c15823a66ab050bb97bf66b219d8c3f68111e2debf12/modules/code/YieldGeneratingProtocol?network=devnet)
 
 ## Team
 

@@ -11,6 +11,8 @@ import { BlockieAvatar } from "~~/components/scaffold-eth";
 import { ProgressBar } from "~~/components/scaffold-eth/ProgressBar";
 import { useInitializeNativeCurrencyPrice } from "~~/hooks/scaffold-eth";
 import { wagmiConfig } from "~~/services/web3/wagmiConfig";
+import { PetraWallet } from "petra-plugin-wallet-adapter";
+
 
 import { WalletProvider } from "./movement/WalletContext";
 

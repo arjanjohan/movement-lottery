@@ -5,7 +5,7 @@ import { PetraWallet } from "petra-plugin-wallet-adapter";
 const WalletContext = createContext(null);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
-  const wallets = useMemo(() => [new PetraWallet()], []);
+  const wallets = [new PetraWallet()];
   return (
     <AptosWalletAdapterProvider plugins={wallets} autoConnect={true}>
       {children}

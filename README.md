@@ -60,6 +60,7 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 - Create AVS 
 
 - Continue building a scaffold-eth like repo for Move to use with Movement Labs.
+  - Create deploy script that copies the account address to nextJS after deployment
 
 ## Links
 

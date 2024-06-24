@@ -1,4 +1,4 @@
-module lottery_addr::Lottery {
+module lottery_addr::lottery {
 
     use 0x1::signer;
     use 0x1::vector;
@@ -20,10 +20,11 @@ module lottery_addr::Lottery {
     const EINSUFFICIENT_BALANCE: u64 = 5;
 
     struct Lotts has store, key {
+        is_open: bool,
         players: vector<address>,
         tickets: SimpleMap<address, u64>, // Store the number of tickets for each player
         winner: address,
-        totalamount: u64,
+        total_amount: u64,
     }
 
     public fun assert_is_owner(addr: address) {
@@ -38,58 +39,71 @@ module lottery_addr::Lottery {
         assert!(!exists<Lotts>(addr), 3);
     }
 
-    public fun initialize(acc: &signer) {
-        let addr = signer::address_of(acc);
+    /// Initializes the yield module with a resource account.
+    fun init_module(deployer: &signer) {
+        // Create the resource account
+        let (resource_account, signer_cap) = account::create_resource_account(deployer, vector::empty());
 
-        assert_is_owner(addr);
-        assert_uninitialized(addr);
+        // Acquire a signer for the resource account
+        let resource_account_signer = account::create_signer_with_capability(&signer_cap);
+
+        // Initialize an AptosCoin coin store in the resource account
+        coin::register<AptosCoin>(&resource_account_signer);
 
         let b_lot = Lotts {
-            totalamount: 0,
+            is_open: true,
+            total_amount: 0,
             players: vector::empty<address>(),
             tickets: simple_map::new<address, u64>(),
             winner: @0x0,
         };
-        move_to(acc, b_lot);
+        move_to(deployer, b_lot);
     }
 
-    public entry fun place_bet(from: &signer, to_address: address, amount: u64) acquires Lotts {
+    public entry fun place_bet(from: &signer, amount: u64) acquires Lotts {
         let from_acc_balance: u64 = coin::balance<AptosCoin>(signer::address_of(from));
         let addr = signer::address_of(from);
 
         assert!(amount <= from_acc_balance, E_NOT_ENOUGH_COINS);
-        aptos_account::transfer(from, to_address, amount);
+        aptos_account::transfer(from, @lottery_addr, amount);
 
-        let b_store = borrow_global_mut<Lotts>(to_address);
+        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
 
         if (simple_map::contains_key(&b_store.tickets, &addr)) {
             let current_tickets = simple_map::borrow(&b_store.tickets, &addr);
             let total_tickets = *current_tickets + amount;
-            simple_map::add(&mut b_store.tickets, addr, total_tickets);
+            simple_map::upsert(&mut b_store.tickets, addr, total_tickets);
         } else {
             vector::push_back(&mut b_store.players, addr);
             simple_map::add(&mut b_store.tickets, addr, amount);
         };
 
-        b_store.totalamount = b_store.totalamount + amount;
+        b_store.total_amount = b_store.total_amount + amount;
     }
 
-    public fun get_balance(acc: &signer): u64 acquires Lotts {
-        let addr = signer::address_of(acc);
-        let b_store = borrow_global_mut<Lotts>(addr);
 
-        assert_is_owner(addr);
-        return b_store.totalamount
+  #[view]
+    public fun get_coin_balance(from: &signer): u64 {
+        let from_acc_balance: u64 = coin::balance<AptosCoin>(signer::address_of(from));
+        return from_acc_balance
     }
 
-    public fun get_number_of_players(store_addr: address): u64 acquires Lotts {
-        let b_store = borrow_global<Lotts>(store_addr);
+  #[view]
+    public fun get_total_amount(): u64 acquires Lotts {
+        let b_store = borrow_global<Lotts>(@lottery_addr);
+        return b_store.total_amount
+    }
+
+  #[view]
+    public fun get_total_players(): u64 acquires Lotts {
+        let b_store = borrow_global<Lotts>(@lottery_addr);
         let total_players = vector::length(&b_store.players);
         return total_players
     }
 
-    public fun get_number_of_tickets(user: address, store_addr: address): u64 acquires Lotts {
-        let b_store = borrow_global<Lotts>(store_addr);
+  #[view]
+    public fun get_player_tickets(user: address): u64 acquires Lotts {
+        let b_store = borrow_global<Lotts>(@lottery_addr);
         if (simple_map::contains_key(&b_store.tickets, &user)) {
             return *simple_map::borrow(&b_store.tickets, &user)
         } else {
@@ -136,9 +150,9 @@ module lottery_addr::Lottery {
 
         let better = *vector::borrow(&b_store.players, winner_idx);
         b_store.winner = better;
-        let amount = b_store.totalamount;
+        let amount = b_store.total_amount;
 
         aptos_account::transfer(acc, better, amount);
-        b_store.totalamount = 0;
+        b_store.total_amount = 0;
     }
 }

@@ -12,11 +12,16 @@ interface DepositInfo {
   block_number: number;
 }
 
-const moduleAddress = "0xdf921eb55ba53511bfe3c15823a66ab050bb97bf66b219d8c3f68111e2debf12";
+const moduleAddress = "0xa990e02c32e468dd942653c48ee53d0af6ae27ea2c17b790621d8deb1f300dd4";
 
 const Yield: NextPage = () => {
   const { account, signAndSubmitTransaction } = useWallet();
-  const aptosConfig = new AptosConfig({ network: Network.CUSTOM });
+  const aptosConfig = new AptosConfig({
+    network: Network.CUSTOM,
+    fullnode: 'https://aptos.devnet.m1.movementlabs.xyz',
+    indexer: 'https://indexer.devnet.m1.movementlabs.xyz/',
+    faucet: 'https://faucet2.movementlabs.xyz'
+  });
   const aptos = new Aptos(aptosConfig);
 
 
@@ -37,7 +42,7 @@ const Yield: NextPage = () => {
     try {
       const depositsResource = await aptos.getAccountResource({
         accountAddress: account?.address,
-        resourceType: `${moduleAddress}::YieldGeneratingProtocol::Deposits`,
+        resourceType: `${moduleAddress}::yield::Deposits`,
       });
       console.log("depositsResource", depositsResource);
       if (depositsResource) {
@@ -61,10 +66,11 @@ const Yield: NextPage = () => {
 
     const transaction: InputTransactionData = {
       data: {
-        function: `${moduleAddress}::YieldGeneratingProtocol::deposit`,
+        function: `${moduleAddress}::yield::deposit`,
         functionArguments: [1] // todo get amount from input
       }
     }
+    console.log("transaction", transaction);
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(transaction);
@@ -82,8 +88,11 @@ const Yield: NextPage = () => {
     <div className="flex items-center flex-col flex-grow pt-10">
       <div className="px-5">
         <h1 className="text-center">
-          <span className="block text-2xl mb-2">Nothing to see here</span>
+          <span className="block text-2xl mb-2">Staked tokens:</span>
         </h1>
+        
+
+
 
         <button className="btn btn-secondary mt-2 w-full"
           onClick={async () => {

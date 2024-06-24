@@ -1,10 +1,10 @@
 [package]
-name = "yield"
+name = "lottery"
 version = "1.0.0"
 authors = ["arjanjohan"]
 
 [addresses]
-lottery_addr="a990e02c32e468dd942653c48ee53d0af6ae27ea2c17b790621d8deb1f300dd4"
+lottery_addr="0xe7d3094cd0bd1949396f576dee4ac3c2dbf194e24701bbf7d73a79d91b5c8eaa"
 
 [dev-addresses]
 

@@ -25,7 +25,7 @@ export const BuyEvents = ({ buys }: BuyEventsProps) => {
               <span>Address</span>
             </th>
             <th className="bg-primary text-lg">
-              <span>Roll</span>
+              <span>Amount</span>
             </th>
           </tr>
         </thead>

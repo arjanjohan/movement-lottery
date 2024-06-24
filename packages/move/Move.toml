@@ -1,10 +1,10 @@
 [package]
-name = "yield_generating_protocol"
+name = "yield"
 version = "1.0.0"
 authors = ["arjanjohan"]
 
 [addresses]
-yield_addr="df921eb55ba53511bfe3c15823a66ab050bb97bf66b219d8c3f68111e2debf12"
+lottery_addr="a990e02c32e468dd942653c48ee53d0af6ae27ea2c17b790621d8deb1f300dd4"
 
 [dev-addresses]
 

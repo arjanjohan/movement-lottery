@@ -3,6 +3,7 @@ module lottery_addr::lottery {
     use 0x1::signer;
     use 0x1::vector;
     use 0x1::coin;
+    use 0x1::event;
     use 0x1::aptos_coin::AptosCoin;
     use 0x1::aptos_account;
     use 0x1::aptos_coin;
@@ -25,6 +26,18 @@ module lottery_addr::lottery {
         tickets: SimpleMap<address, u64>, // Store the number of tickets for each player
         winner: address,
         total_amount: u64,
+    }
+
+    #[event]
+    struct TicketEvent has drop, store {
+        addr: address,
+        amount: u64
+    }
+
+    #[event]
+    struct WinnerEvent has drop, store {
+        addr: address,
+        amount: u64
     }
 
     public fun assert_is_owner(addr: address) {
@@ -79,36 +92,13 @@ module lottery_addr::lottery {
         };
 
         b_store.total_amount = b_store.total_amount + amount;
-    }
-
-
-  #[view]
-    public fun get_coin_balance(from: &signer): u64 {
-        let from_acc_balance: u64 = coin::balance<AptosCoin>(signer::address_of(from));
-        return from_acc_balance
-    }
-
-  #[view]
-    public fun get_total_amount(): u64 acquires Lotts {
-        let b_store = borrow_global<Lotts>(@lottery_addr);
-        return b_store.total_amount
-    }
-
-  #[view]
-    public fun get_total_players(): u64 acquires Lotts {
-        let b_store = borrow_global<Lotts>(@lottery_addr);
-        let total_players = vector::length(&b_store.players);
-        return total_players
-    }
-
-  #[view]
-    public fun get_player_tickets(user: address): u64 acquires Lotts {
-        let b_store = borrow_global<Lotts>(@lottery_addr);
-        if (simple_map::contains_key(&b_store.tickets, &user)) {
-            return *simple_map::borrow(&b_store.tickets, &user)
-        } else {
-            return 0
-        }
+        // Define an event.
+        let event = TicketEvent {
+            addr: addr,
+            amount: amount
+        };
+        // Emit the event just defined.
+        0x1::event::emit(event);
     }
 
     #[randomness]
@@ -118,7 +108,7 @@ module lottery_addr::lottery {
         let total_players = vector::length(&b_store.players);
 
         assert_is_owner(addr);
-        assert!(total_players >= 3, PLAYERS_LESS_THAN_THREE);
+        // assert!(total_players >= 3, PLAYERS_LESS_THAN_THREE);
 
         // Calculate the total number of tickets
         let total_tickets = 0;

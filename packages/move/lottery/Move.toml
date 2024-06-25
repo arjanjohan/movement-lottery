@@ -1,0 +1,23 @@
+[package]
+name = "lottery"
+version = "1.0.0"
+authors = ["arjanjohan"]
+
+[addresses]
+lottery_addr="0x727927006b3e2c31d82aee6f23e533bbe49f7312dc32bf847acc41fdae0c4b71"
+yield_addr="0x18f4b551e12f0ce0dc754214899502eb25f04aa1f0ff63aa9aef48ee9f8c3dde"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dependencies.yield]
+git = "https://github.com/arjanjohan/movement-lottery"
+rev = "master"
+subdir = "packages/move/yield"
+
+
+[dev-dependencies]

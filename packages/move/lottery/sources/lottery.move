@@ -11,6 +11,8 @@ module lottery_addr::lottery {
     use 0x1::account;
     use 0x1::randomness;
     use 0x1::simple_map::{Self, SimpleMap};
+    use yield_addr::yield;
+    
 
     /// Error codes
     const STARTING_PRICE_IS_LESS: u64 = 0;
@@ -21,6 +23,7 @@ module lottery_addr::lottery {
     const EINSUFFICIENT_BALANCE: u64 = 5;
 
     struct Lotts has store, key {
+        signer_cap: account::SignerCapability,
         is_open: bool,
         players: vector<address>,
         tickets: SimpleMap<address, u64>, // Store the number of tickets for each player
@@ -52,10 +55,9 @@ module lottery_addr::lottery {
         assert!(!exists<Lotts>(addr), 3);
     }
 
-    /// Initializes the yield module with a resource account.
     fun init_module(deployer: &signer) {
         // Create the resource account
-        let (resource_account, signer_cap) = account::create_resource_account(deployer, vector::empty());
+        let (_, signer_cap) = account::create_resource_account(deployer, vector::empty());
 
         // Acquire a signer for the resource account
         let resource_account_signer = account::create_signer_with_capability(&signer_cap);
@@ -64,6 +66,7 @@ module lottery_addr::lottery {
         coin::register<AptosCoin>(&resource_account_signer);
 
         let b_lot = Lotts {
+            signer_cap: signer_cap,
             is_open: true,
             total_amount: 0,
             players: vector::empty<address>(),
@@ -73,14 +76,24 @@ module lottery_addr::lottery {
         move_to(deployer, b_lot);
     }
 
+ // testing only, delete this
+    public entry fun withdraw(from: &signer) acquires Lotts {
+        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
+        let resource_account_signer = account::create_signer_with_capability(&b_store.signer_cap);
+        yield::withdraw(&resource_account_signer);
+        aptos_account::transfer(&resource_account_signer, signer::address_of(from), 110000000);
+    }
+
     public entry fun place_bet(from: &signer, amount: u64) acquires Lotts {
         let from_acc_balance: u64 = coin::balance<AptosCoin>(signer::address_of(from));
         let addr = signer::address_of(from);
+        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
+        let resource_account_signer = account::create_signer_with_capability(&b_store.signer_cap);
+        let resource_addr = signer::address_of(&resource_account_signer);
 
         assert!(amount <= from_acc_balance, E_NOT_ENOUGH_COINS);
-        aptos_account::transfer(from, @lottery_addr, amount);
+        aptos_account::transfer(from, resource_addr, amount);
 
-        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
 
         if (simple_map::contains_key(&b_store.tickets, &addr)) {
             let current_tickets = simple_map::borrow(&b_store.tickets, &addr);
@@ -97,17 +110,20 @@ module lottery_addr::lottery {
             addr: addr,
             amount: amount
         };
+
+        // Acquire a signer for the resource account and deposit to yield contract
+        yield::deposit(&resource_account_signer, amount);
+
         // Emit the event just defined.
         0x1::event::emit(event);
     }
 
-    #[randomness]
-    entry fun draw_winner(acc: &signer) acquires Lotts {
-        let addr = signer::address_of(acc);
-        let b_store = borrow_global_mut<Lotts>(addr);
+    public entry fun draw_winner(from: &signer) acquires Lotts {
+        let addr = signer::address_of(from);
+        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
         let total_players = vector::length(&b_store.players);
 
-        assert_is_owner(addr);
+        // assert_is_owner(addr);
         // assert!(total_players >= 3, PLAYERS_LESS_THAN_THREE);
 
         // Calculate the total number of tickets
@@ -120,8 +136,9 @@ module lottery_addr::lottery {
             i = i + 1;
         };
 
-        // // Draw a random ticket
-        let winner_ticket = randomness::u64_range(0, total_tickets);
+        // let winner_ticket = randomness::u64_range(0, total_tickets);
+        // TODO add randomness
+        let winner_ticket = 0;
 
         // // Find the corresponding winner
         let cumulative_tickets = 0;
@@ -142,7 +159,9 @@ module lottery_addr::lottery {
         b_store.winner = better;
         let amount = b_store.total_amount;
 
-        aptos_account::transfer(acc, better, amount);
+        aptos_account::transfer(from, better, amount); // todo: transfer from resource account to winner
         b_store.total_amount = 0;
+        b_store.is_open = false;
     }
+
 }

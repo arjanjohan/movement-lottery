@@ -4,8 +4,8 @@ version = "1.0.0"
 authors = ["arjanjohan"]
 
 [addresses]
-lottery_addr="0x727927006b3e2c31d82aee6f23e533bbe49f7312dc32bf847acc41fdae0c4b71"
-yield_addr="0x18f4b551e12f0ce0dc754214899502eb25f04aa1f0ff63aa9aef48ee9f8c3dde"
+lottery_addr="0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885"
+yield_addr="0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776"
 
 [dev-addresses]
 
@@ -15,9 +15,6 @@ rev = "mainnet"
 subdir = "aptos-move/framework/aptos-framework"
 
 [dependencies.yield]
-git = "https://github.com/arjanjohan/movement-lottery"
-rev = "master"
-subdir = "packages/move/yield"
-
+local = "../yield"
 
 [dev-dependencies]

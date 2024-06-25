@@ -112,6 +112,36 @@ const Lottery: NextPage = () => {
     }
   };
 
+
+
+  // const withdraw = async () => {
+  //   if (!account) {
+  //     console.log("No account connected");
+  //     return;
+  //   };
+  //   setTransactionInProgress(true);
+
+  //   const transaction: InputTransactionData = {
+  //     data: {
+  //       function: `${LOTTERY}::lottery::withdraw`,
+  //       functionArguments: [] // TODO get amount from input
+  //     }
+  //   };
+  //   console.log("transaction", transaction);
+  //   try {
+  //     // sign and submit transaction to chain
+  //     const response = await signAndSubmitTransaction(transaction);
+  //     // wait for transaction
+  //     await aptos.waitForTransaction({ transactionHash: response.hash });
+  //     // fetchEvents(); // Refresh events after placing a bet
+  //   } catch (error: any) {
+  //     console.log("error", error);
+  //   } finally {
+  //     setTransactionInProgress(false);
+  //   }
+  // };
+
+
   const drawWinner = async () => {
     if (!account) {
       console.log("No account connected");

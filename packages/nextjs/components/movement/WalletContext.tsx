@@ -1,4 +1,4 @@
-import { createContext, useContext, ReactNode, useMemo } from "react";
+import { createContext, useContext, ReactNode } from "react";
 import { AptosWalletAdapterProvider } from "@aptos-labs/wallet-adapter-react";
 import { PetraWallet } from "petra-plugin-wallet-adapter";
 

@@ -81,14 +81,6 @@ module lottery_addr::lottery {
         move_to(deployer, b_lot);
     }
 
- // testing only, delete this
-    public entry fun withdraw(from: &signer) acquires Lotts {
-        let b_store = borrow_global_mut<Lotts>(@lottery_addr);
-        let resource_account_signer = account::create_signer_with_capability(&b_store.signer_cap);
-        yield::withdraw(&resource_account_signer);
-        aptos_account::transfer(&resource_account_signer, signer::address_of(from), 110000000);
-    }
-
     public entry fun place_bet(from: &signer, amount: u64) acquires Lotts {
         let from_acc_balance: u64 = coin::balance<AptosCoin>(signer::address_of(from));
         let addr = signer::address_of(from);

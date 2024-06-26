@@ -44,10 +44,5 @@
     "node": ">=18.17.0"
   },
   "dependencies": {
-    "@aptos-labs/ts-sdk": "^1.19.0",
-    "@aptos-labs/wallet-adapter-ant-design": "^2.4.11",
-    "@aptos-labs/wallet-adapter-react": "^3.3.0",
-    "aptos": "^1.21.0",
-    "petra-plugin-wallet-adapter": "^0.4.5"
   }
 }

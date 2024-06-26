@@ -40,16 +40,16 @@ The Lottery contract is the core of our dApp. After each sale, there is an x% ch
 Swap tokens for lottery tickets. Each time this function is called, there is a x% chance the lottery will close.
 
 #### SetYieldStrategy
-Can only be called by the owner, and it sets up the yield generating strategy. It takes a single contract address as input, and deposits all tokens to this contract. 
+TODO
 
 ### Yield
-The Yield contract serves as an example for the happy flow scenario. It's a very simple (and lucrative) yield generating contract, where each deposit earns 1% each blocks. After deploying the contract, it needs to be funded by the deployer so it can pay the yield. Obviously it's only for testing purposes, to showcase how the lottery works.
+The Yield contract serves as an example for the happy flow scenario. It's a very simple (and lucrative) yield generating contract, where each deposit earns 10% upon withdrawal. After deploying the contract, it needs to be funded by the deployer so it can pay the yield. Obviously it's only for testing purposes, to showcase how the lottery works.
 
 #### Deposit
-Lets any user deposit tokens into the contract. The blocknumber and amount is recorded in the contract.
+Lets any user deposit tokens into the contract. The address and amount is recorded in the contract.
 
 #### Withdraw
-Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal.
+Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal. For testing purposes the yield is fixed at 10% upon withdrawal.
 
 ## Next steps
 
@@ -78,12 +78,22 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 
 ## Links
 
-- [Vercel](https://winwin-lottery.vercel.app/)
-- [Github Lottery AVS](TODO)
-- [Github Lottery dApp](https://github.com/arjanjohan/move-lottery)
+#### Presentation
 - [Presentation slides](https://docs.google.com/presentation/d/1OYDtBUJdDUf8DOLzdxWaw5Tu8mV8_wMIrQSRr73XafI/edit?usp=sharing)
-- [Deployed Lottery contract](https://explorer.devnet.m1.movementlabs.xyz/account/0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885?network=devnet)
-- [Deployed Yield contract](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
+
+#### Vercel
+- [Lottery dApp](https://winwin-lottery.vercel.app/)
+- [AVS dashboard]()
+
+#### Github repos
+- [Lottery AVS](https://github.com/arjanjohan/avs-lottery)
+- [Lottery dApp and contracts](https://github.com/arjanjohan/move-lottery)
+
+#### Contracts
+
+- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885?network=devnet)
+- [Deployed Yield contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
+- [Deployed Lottery AVS on Ethereum Holesky](https://holesky.etherscan.io/address/0x1081ded255574EC1dF6948DfEc3442c54B1De19A#code)
 
 ## Team
 

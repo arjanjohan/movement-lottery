@@ -88,7 +88,7 @@ module yield_addr::yield {
     }
 
     /// Returns the total deposit balance for a given address.
-    public fun get_balance(yield: &Yield, owner: address): u64 acquires Yield {
+    public fun get_balance(owner: address): u64 acquires Yield {
         let yield = borrow_global_mut<Yield>(@yield_addr);
         if (!simple_map::contains_key(&yield.deposits, &owner)) {
             return 0

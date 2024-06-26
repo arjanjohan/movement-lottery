@@ -4,7 +4,7 @@ version = "1.0.0"
 authors = ["arjanjohan"]
 
 [addresses]
-lottery_addr="0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885"
+lottery_addr="0xf4636011cb8b04c3e2c10ae013e76f977d3f746cf104f5785a9bde76bde7873f"
 yield_addr="0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776"
 
 [dev-addresses]

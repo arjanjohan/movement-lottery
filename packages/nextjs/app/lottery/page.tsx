@@ -74,7 +74,7 @@ const Lottery: NextPage = () => {
       if (lotteryResource) {
         setLotteryIsOpen(lotteryResource.is_open);
         setNumberOfTicketsSold(lotteryResource.total_amount);
-        setLotteryWinner(lotteryResource.winner);
+        setLotteryWinner(lotteryResource.winning_address);
         setNumberOfPlayers(lotteryResource.players.length);
       } else {
         console.log("no lotteryResource")
@@ -152,6 +152,32 @@ const Lottery: NextPage = () => {
     const transaction: InputTransactionData = {
       data: {
         function: `${LOTTERY}::lottery::draw_winner`,
+        functionArguments: []
+      }
+    };
+    try {
+      // sign and submit transaction to chain
+      const response = await signAndSubmitTransaction(transaction);
+      // wait for transaction
+      await aptos.waitForTransaction({ transactionHash: response.hash });
+    } catch (error: any) {
+      console.log("error", error);
+    } finally {
+      setTransactionInProgress(false);
+    }
+  };
+
+
+  const drawWinnerRandom = async () => {
+    if (!account) {
+      console.log("No account connected");
+      return;
+    };
+    setTransactionInProgress(true);
+
+    const transaction: InputTransactionData = {
+      data: {
+        function: `${LOTTERY}::lottery::draw_winner_random`,
         functionArguments: []
       }
     };
@@ -258,6 +284,7 @@ const Lottery: NextPage = () => {
           >
             Draw winner
           </button>}
+
         </div>
         <div className="flex flex-col items-center pt-4 max-lg:row-start-1">
           <div className="flex flex-col items-center space-y-4 bg-base-100 shadow-lg shadow-secondary border-8 border-secondary rounded-xl p-3 m-4 w-full max-w-lg">
@@ -275,6 +302,19 @@ const Lottery: NextPage = () => {
             <span className="text-xl"> APY for owner: </span>
             <div>{yieldPercentage} %</div>
             <div>{(numberOfTicketsSold/100000000) * (yieldPercentage / 100) } MOVE</div>
+            {!lotteryIsOpen && 
+          <button
+            className="btn btn-secondary mt-2"
+            onClick={async () => {
+              try {
+                await claimYield();
+              } catch (err) {
+                console.error("Error calling drawWinner function");
+              }
+            }}
+          >
+            Claim Yield
+          </button>}
           </div>
         </div>
       </div>

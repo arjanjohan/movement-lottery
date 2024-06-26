@@ -11,6 +11,8 @@
 
 ⚙️ Built using Eigenlayer, Move, React and Typescript.
 
+🧱 I build this project using [Scaffold-ETH 2](https://scaffoldeth.io/), modifying it to work with Move contracts instead of Solidity/EVM. I did this because the Move starterkit repos that I found did not have pretty and clean frontends by default. After the hackathon, I want to continue working on this. Having an easy and intuitive scaffolding tool/repo will be a great tool for all Movement developers.
+
 <!-- - ✅ **Contract Hot Reload**: The frontend auto-adapts to your smart contract as you edit it.
 - 🪝 **[Scaffold hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
 - 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
@@ -50,24 +52,38 @@ Lets any user deposit tokens into the contract. The blocknumber and amount is re
 Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal.
 
 ## Next steps
-- Connect NextJS with M1 Movement
-- Create page to interact with lottery
-  - Buy tickets
+
+#### Lottery
+- Refactor contracts
+  - Allow multiple lottery instances
+  - Keep track of yield deposits per lottery. Each lottery  = unique resource account
+- Complete lottery dashboard page
   - Display user tickets
   - Display results (for user)
   - Display totals (amount + time + maybe addresses playing)
-- Connext Lottery with Yield contract
-- Create AVS 
+  - Display recent ticket sales
+- Automatic closing of lottery
+  - Based on time or amount or randomness? Have this as option for creator/owner
+- Create AVS contract
+- Create AVS operator script
 
+#### Scaffold-Move
 - Continue building a scaffold-eth like repo for Move to use with Movement Labs.
   - Create deploy script that copies the account address to nextJS after deployment
+  - Create a Debug page
+    - Display all move contracts
+    - Interact with all read and write functions
+  - Add faucet button
+  - Add block explorer for local networks
 
 ## Links
 
-- [Vercel](TODO)
-- [Github](https://github.com/arjanjohan/move-lottery)
-- [Deployed Lottery contract](TODO)
-- [Deployed Yield contract](https://explorer.devnet.m1.movementlabs.xyz/account/0xdf921eb55ba53511bfe3c15823a66ab050bb97bf66b219d8c3f68111e2debf12/modules/code/YieldGeneratingProtocol?network=devnet)
+- [Vercel](https://winwin-lottery.vercel.app/)
+- [Github Lottery AVS](TODO)
+- [Github Lottery dApp](https://github.com/arjanjohan/move-lottery)
+- [Presentation slides](https://docs.google.com/presentation/d/1OYDtBUJdDUf8DOLzdxWaw5Tu8mV8_wMIrQSRr73XafI/edit?usp=sharing)
+- [Deployed Lottery contract](https://explorer.devnet.m1.movementlabs.xyz/account/0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885?network=devnet)
+- [Deployed Yield contract](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
 
 ## Team
 

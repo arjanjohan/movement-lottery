@@ -14,8 +14,6 @@ import { useWallet, InputTransactionData } from "@aptos-labs/wallet-adapter-reac
 
 const LotteryDetails = () => {
   
-  // TODO use router instead
-  const id = 2;
 
   // AVS contracts
   const avsContractAddress = externalContracts[17000].LotteryServiceManager.address;
@@ -32,6 +30,7 @@ const LotteryDetails = () => {
   });
   const aptos = new Aptos(aptosConfig);
 
+  const [lotteryId, setLotteryId] = useState<number>(1); // TODO: get from router
   const [lotteryDetails, setLotteryDetails] = useState<any>(null);
   const [tokensToBuy, setTokensToBuy] = useState<string | bigint>("");
   const [yieldPercentage, setYieldPercentage] = useState<number>(10);
@@ -39,10 +38,10 @@ const LotteryDetails = () => {
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
 
   useEffect(() => {
-    if (id) {
-      fetchLotteryDetails(id);
+    if (lotteryId) {
+      fetchLotteryDetails(lotteryId);
     }
-  }, [id]);
+  }, [lotteryId]);
 
   const fetchLotteryDetails = async (lotteryId: number) => {
     console.log("fetching lottery details", lotteryId);
@@ -63,8 +62,11 @@ const LotteryDetails = () => {
     }
   };
 
-
-
+  const getUserTickets = () => {
+    const userTickets = lotteryDetails.tickets.data.find((ticket: any) => ticket.key === account?.address);
+    return userTickets ? formatMoveAmounts(parseInt(userTickets.value)) : 0;
+  };
+  
   const placeBet = async () => {
     if (!account) {
       console.log("No account connected");
@@ -74,7 +76,7 @@ const LotteryDetails = () => {
     const transaction: InputTransactionData = {
       data: {
         function: `${LOTTERY}::lottery::place_bet`,
-        functionArguments: [id, (BigInt(tokensToBuy) * 100000000n).toString()] // TODO get amount from input
+        functionArguments: [lotteryId, (BigInt(tokensToBuy) * 100000000n).toString()] // TODO get amount from input
       }
     };
     console.log("transaction", transaction);
@@ -104,7 +106,7 @@ const LotteryDetails = () => {
       const contract = new ethers.Contract(avsContractAddress, abi, wallet);
 
       // console.log(`Creating new task with name: ${randomName}`);
-      const tx = await contract.createNewTask(id, lotteryDetails.signer_cap.account, []);
+      const tx = await contract.createNewTask(lotteryId, lotteryDetails.signer_cap.account, ["0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776"]);
       await tx.wait();
       console.log("Task created successfully");
     } catch (error) {
@@ -121,7 +123,29 @@ const LotteryDetails = () => {
     const transaction: InputTransactionData = {
       data: {
         function: `${LOTTERY}::lottery::draw_winner`,
-        functionArguments: [id]
+        functionArguments: [lotteryId]
+      }
+    };
+    try {
+      // sign and submit transaction to chain
+      const response = await signAndSubmitTransaction(transaction);
+      // wait for transaction
+      await aptos.waitForTransaction({ transactionHash: response.hash });
+    } catch (error: any) {
+      console.log("error", error);
+    }
+  };
+
+  const claimYield = async () => {
+    if (!account) {
+      console.log("No account connected");
+      return;
+    };
+
+    const transaction: InputTransactionData = {
+      data: {
+        function: `${LOTTERY}::lottery::claim_yield`,
+        functionArguments: [lotteryId]
       }
     };
     try {
@@ -195,7 +219,8 @@ const LotteryDetails = () => {
           </div>
           
           <div className="flex flex-col items-center space-y-4 bg-base-100 shadow-lg shadow-secondary border-8 border-secondary rounded-xl p-3 m-4 w-full max-w-lg">
-            <span className="text-xl"> Buy tickets </span>
+            <span className="text-xl"> Tickets </span>
+            <div>You currently have <b>{getUserTickets()}</b> tickets</div>
             <div>1 ticket = 1 MOVE</div>
             <div className="flex flex-col space-y-2">
               <IntegerInput
@@ -208,7 +233,7 @@ const LotteryDetails = () => {
             Total: {tokensToBuy ? tokensToBuy.toString() : 0} MOVE
             <button
               className="btn btn-secondary mt-2"
-              disabled={!lotteryDetails.is_open}
+              // disabled={!lotteryDetails.is_open}
               onClick={async () => {
                 try {
                   await placeBet();
@@ -260,7 +285,7 @@ const LotteryDetails = () => {
             <span className="text-xl"> Profit for owner: </span>
             <div>{yieldPercentage} %</div>
             <div>{formatMoveAmounts(lotteryDetails.total_amount * (yieldPercentage / 100)) } MOVE</div>
-            {lotteryDetails.is_open &&
+            {!lotteryDetails.is_open &&
             <div>
               <button
                 className="btn btn-secondary mt-2"
@@ -277,10 +302,10 @@ const LotteryDetails = () => {
               
               <button
                 className="btn btn-secondary mt-2"
-                disabled={!AvsAproved}
+                // disabled={!AvsAproved}
                 onClick={async () => {
                   try {
-                    // await claimYield();
+                    await claimYield();
                   } catch (err) {
                     console.error("Error calling drawWinner function");
                   }

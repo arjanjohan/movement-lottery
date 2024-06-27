@@ -81,6 +81,11 @@ const OverviewPage: NextPage = () => {
     setShowOpenOnly(!showOpenOnly);
   };
 
+
+  const formatMoveAmounts = (amount: number) => {
+    return parseFloat(((amount/100000000) ).toFixed(8).toString());
+  }
+
   const filteredLotteries = showOpenOnly
     ? lotteries.filter(lottery => lottery.isOpen)
     : lotteries;
@@ -144,7 +149,7 @@ const OverviewPage: NextPage = () => {
                   <td>{lottery.id}</td>
                   <td>{lottery.rtp}%</td>
                   <td>{lottery.players.length}</td>
-                  <td>{lottery.totalAmount} MOVE</td>
+                  <td>{formatMoveAmounts(lottery.totalAmount)} MOVE</td>
                   <td>{lottery.isOpen ? "Open" : "Closed"}</td>
                   <td>
                     <Link legacyBehavior href={`/lotteries/${lottery.id}`}>

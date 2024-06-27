@@ -15,17 +15,16 @@ module lottery_addr::lottery {
     use yield_addr::yield;
 
     /// Error codes
-    const STARTING_PRICE_IS_LESS: u64 = 0;
-    const E_NOT_ENOUGH_COINS: u64 = 101;
+    const USER_IS_NOT_CREATOR: u64 = 0;
+    const NOT_ENOUGH_COINS: u64 = 1;
     const NO_PLAYERS: u64 = 2;
-    const EINVALID_REWARD_AMOUNT: u64 = 3;
-    const LESS_PRICE: u64 = 4;
-    const EINSUFFICIENT_BALANCE: u64 = 5;
-    const LOTTERY_IS_NOT_CLOSED: u64 = 6;
-    const LOTTERY_IS_CLOSED: u64 = 7;
+    const LOTTERY_IS_NOT_CLOSED: u64 = 3;
+    const LOTTERY_IS_CLOSED: u64 = 4;
+    const YIELD_IS_ALREADY_CLAIMED: u64 = 5;
 
     struct Lottery has store, key {
         signer_cap: account::SignerCapability,
+        creator_address: address,
         is_open: bool,
         players: vector<address>,
         tickets: SimpleMap<address, u64>, // Store the number of tickets for each player
@@ -34,6 +33,7 @@ module lottery_addr::lottery {
         total_amount: u64,
         rtp_percentage: u64,
         yield_earned: u64,
+        yield_claimed: bool,
     }
 
     struct LotteriesManager has store, key {
@@ -56,18 +56,6 @@ module lottery_addr::lottery {
         lottery_id: u64,
     }
 
-    public fun assert_is_owner(addr: address) {
-        assert!(addr == @lottery_addr, 0);
-    }
-
-    public fun assert_is_initialized(addr: address) {
-        assert!(exists<LotteriesManager>(addr), 1);
-    }
-
-    public fun assert_uninitialized(addr: address) {
-        assert!(!exists<LotteriesManager>(addr), 3);
-    }
-
     fun init_module(deployer: &signer) {
         // Create the resource account
         let (_, signer_cap) = account::create_resource_account(deployer, vector::empty());
@@ -81,7 +69,7 @@ module lottery_addr::lottery {
         let manager = LotteriesManager {
             signer_cap: signer_cap,
             lotteries: simple_map::new<u64, Lottery>(),
-            next_lottery_id: 0,
+            next_lottery_id: 1,
         };
         move_to(deployer, manager);
     }
@@ -101,6 +89,7 @@ module lottery_addr::lottery {
 
         let lottery = Lottery {
             signer_cap: signer_cap,
+            creator_address: signer::address_of(from),
             is_open: true,
             players: vector::empty<address>(),
             tickets: simple_map::new<address, u64>(),
@@ -109,6 +98,7 @@ module lottery_addr::lottery {
             total_amount: 0,
             rtp_percentage: rtp_percentage,
             yield_earned: 0,
+            yield_claimed: false,
         };
 
         let lottery_id = manager.next_lottery_id;
@@ -124,7 +114,9 @@ module lottery_addr::lottery {
         let resource_account_signer = account::create_signer_with_capability(&lottery.signer_cap);
         let resource_addr = signer::address_of(&resource_account_signer);
 
-        assert!(amount <= from_acc_balance, E_NOT_ENOUGH_COINS);
+        assert!(amount <= from_acc_balance, NOT_ENOUGH_COINS);
+        assert!(lottery.is_open, LOTTERY_IS_CLOSED);
+
         aptos_account::transfer(from, resource_addr, amount);
 
         if (simple_map::contains_key(&lottery.tickets, &addr)) {
@@ -299,8 +291,10 @@ module lottery_addr::lottery {
         let resource_account_signer = account::create_signer_with_capability(&lottery.signer_cap);
 
         assert!(lottery.is_open == false, LOTTERY_IS_NOT_CLOSED);
-        assert_is_owner(addr);
+        assert!(lottery.yield_claimed == false, YIELD_IS_ALREADY_CLAIMED);
+        assert!(addr == lottery.creator_address, USER_IS_NOT_CREATOR);
         let amount = lottery.yield_earned;
         aptos_account::transfer(&resource_account_signer, addr, amount);
+        lottery.yield_claimed = true;
     }
 }

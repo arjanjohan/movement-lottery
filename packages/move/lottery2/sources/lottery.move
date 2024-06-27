@@ -40,6 +40,7 @@ module lottery_addr::lottery {
         signer_cap: account::SignerCapability,
         lotteries: SimpleMap<u64, Lottery>,
         next_lottery_id: u64,
+        create_fee: u64,
     }
 
     #[event]
@@ -70,6 +71,7 @@ module lottery_addr::lottery {
             signer_cap: signer_cap,
             lotteries: simple_map::new<u64, Lottery>(),
             next_lottery_id: 1,
+            create_fee: 20000000 // 0.2 MOVE create fee
         };
         move_to(deployer, manager);
     }
@@ -78,6 +80,8 @@ module lottery_addr::lottery {
         let manager = borrow_global_mut<LotteriesManager>(@lottery_addr);
         let manager_resource_account_signer = account::create_signer_with_capability(&manager.signer_cap);
 
+        let manager_resource_addr = signer::address_of(&manager_resource_account_signer);
+        aptos_account::transfer(from, manager_resource_addr, manager.create_fee);
 
         // Create a new resource account for the lottery
         let seed = bcs::to_bytes(&manager.next_lottery_id);
@@ -192,13 +196,14 @@ module lottery_addr::lottery {
 
         let better = *vector::borrow(&lottery.players, winner_idx);
         lottery.winning_address = better;
+        // let amount = lottery.total_amount * (lottery.rtp_percentage) / 100; // this requires extra checks
         let amount = lottery.total_amount;
 
         // Withdraw from yield contract and determine yield earned
         let resource_balance_before: u64 = coin::balance<AptosCoin>(resource_addr);
         yield::withdraw(&resource_account_signer);
         let resource_balance_after: u64 = coin::balance<AptosCoin>(resource_addr);
-        
+
         let yield_earned = 0;
         if (resource_balance_after > (resource_balance_before + amount)){
             yield_earned = resource_balance_after - resource_balance_before - amount;

@@ -1,3 +1,3 @@
 export const LOTTERY_OLD = "0xf4636011cb8b04c3e2c10ae013e76f977d3f746cf104f5785a9bde76bde7873f";
-export const LOTTERY = "0xa34e1f565bc73e6f3bd6c571d24015b2c4b93b688535216c43ade8ab116e2c77";
+export const LOTTERY = "0x40311704088e14867deda2e4cb49a2606e4fc21df6d7a51226a91ddbd0ba4e78";
 export const YIELD = "0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776";

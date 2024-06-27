@@ -21,6 +21,7 @@ const OverviewPage: NextPage = () => {
   const [lotteries, setLotteries] = useState<any[]>([]);
   const [returnToPlayer, setReturnToPlayer] = useState(100);
   const [showOpenOnly, setShowOpenOnly] = useState(false);
+  const [lotteryCreateFee, setLotteryCreateFee] = useState<number>(20000000);
 
   useEffect(() => {
     fetchLottery();
@@ -33,6 +34,7 @@ const OverviewPage: NextPage = () => {
         resourceType: `${LOTTERY}::lottery::LotteriesManager`
       });
       console.log("lotteryResource:", lotteryResource);
+      // setLotteryCreateFee(lotteryResource.create_fee);
 
       const fetchedLotteries = lotteryResource.lotteries.data.map((lottery: any) => ({
         id: lottery.key,
@@ -106,6 +108,8 @@ const OverviewPage: NextPage = () => {
             disableMultiplyBy1e18
           />
         </div>
+        Fee: {formatMoveAmounts(lotteryCreateFee)} MOVE
+
         <button
           className="btn btn-secondary mt-2"
           onClick={async () => {

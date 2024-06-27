@@ -13,23 +13,19 @@
 
 🧱 I build this project using [Scaffold-ETH 2](https://scaffoldeth.io/), modifying it to work with Move contracts instead of Solidity/EVM. I did this because the Move starter kit repos that I found did not have a pretty and clean frontend. After the hackathon, I want to continue working on this. Having an easy and intuitive scaffolding tool/repo will be a great tool for all Movement developers.
 
-<!-- - ✅ **Contract Hot Reload**: The frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Scaffold hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the AVS smart contracts. -->
 ## Diagram
 
 ![dashboard 1](assets/diagram.png)
 
 ## Screenshots
 
-| Landingpage                   | Create Lottery and Overview page                     |
+| Landing page                      | Create and Overview               |
 | --------------------------------- | --------------------------------- |
-| ![dashboard 1](assets/1.png) | ![dashboard 2](assets/2.png) |
+| ![dashboard 1](screenshots/1.png) | ![dashboard 2](screenshots/2.png) |
 
-|  Lottery page                   | AVS Dashboard                     |
+|  Lottery                          | AVS Dashboard                     |
 | --------------------------------- | --------------------------------- |
-| ![dashboard 3](assets/3.png) | ![dashboard 4](assets/4.png) |
+| ![dashboard 3](screenshots/3.png) | ![dashboard 4](screenshots/4.png) |
 
 ## Contracts
 

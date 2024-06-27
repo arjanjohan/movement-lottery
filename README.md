@@ -54,24 +54,20 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 ## Next steps
 
 #### Lottery
-- Refactor contracts
-  - Allow multiple lottery instances
-  - Keep track of yield deposits per lottery. Each lottery  = unique resource account
+- Include Aptos randomness module (code is there, but not working on Movement M1 devnet)
+- Add router for lotteries page
 - Complete lottery dashboard page
   - Display user tickets
-  - Display results (for user)
-  - Display totals (amount + time + maybe addresses playing)
-  - Display recent ticket sales
+  - Display recent ticket sales (cannot read events, no indexer on Movement M1 devnet)
 - Automatic closing of lottery
   - Based on time or amount or randomness? Have this as option for creator/owner
-- Create AVS contract
 - Create AVS operator script
 
 #### Scaffold-Move
 - Continue building a scaffold-eth like repo for Move to use with Movement Labs.
   - Create deploy script that copies the account address to nextJS after deployment
   - Create a Debug page
-    - Display all move contracts
+    - Display all deployed move contracts
     - Interact with all read and write functions
   - Add faucet button
   - Add block explorer for local networks
@@ -91,7 +87,7 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 
 #### Contracts
 
-- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x71eaeb8459fe5c2df571f45593e4b767a0a9288f8591fd50a254ba49b1887885?network=devnet)
+- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0xdae25764db6f5f9b6954f3475991a2a97a9f367dba8f110b96b9957c5ed8074f?network=devnet)
 - [Deployed Yield contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
 - [Deployed Lottery AVS on Ethereum Holesky](https://holesky.etherscan.io/address/0x1081ded255574EC1dF6948DfEc3442c54B1De19A#code)
 

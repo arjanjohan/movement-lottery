@@ -43,6 +43,7 @@ const OverviewPage: NextPage = () => {
         tickets: lottery.value.tickets,
         winningAddress: lottery.value.winning_address,
         winningTicket: lottery.value.winning_ticket,
+        rtp: lottery.value.rtp_percentage,
         yieldEarned: lottery.value.yield_earned
       }));
 
@@ -61,7 +62,7 @@ const OverviewPage: NextPage = () => {
     const transaction: InputTransactionData = {
       data: {
         function: `${LOTTERY}::lottery::create_lottery`,
-        functionArguments: []
+        functionArguments: [returnToPlayer]
       }
     };
     console.log("transaction", transaction);
@@ -113,8 +114,8 @@ const OverviewPage: NextPage = () => {
           Create Lottery
         </button>
       </div>
-      <div className="flex justify-center px-4 md:px-0">
-        <div className="overflow-x-auto w-full shadow-2xl rounded-xl">
+      <div className="flex justify-center p-3 m-4  px-4 md:px-0">
+        <div className="overflow-x-auto w-full shadow-lg shadow-secondary border-8 border-secondary rounded-xl">
           <div className="flex justify-end p-4">
             <label className="flex items-center">
               <input
@@ -141,9 +142,9 @@ const OverviewPage: NextPage = () => {
               {filteredLotteries.map((lottery, index) => (
                 <tr key={index}>
                   <td>{lottery.id}</td>
-                  <td>100%</td>
+                  <td>{lottery.rtp}%</td>
                   <td>{lottery.players.length}</td>
-                  <td>{lottery.totalAmount}</td>
+                  <td>{lottery.totalAmount} MOVE</td>
                   <td>{lottery.isOpen ? "Open" : "Closed"}</td>
                   <td>
                     <Link legacyBehavior href={`/lotteries/${lottery.id}`}>

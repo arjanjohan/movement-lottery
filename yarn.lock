@@ -1954,6 +1954,7 @@ __metadata:
     react-copy-to-clipboard: ^5.1.0
     react-dom: ^18.2.0
     react-hot-toast: ^2.4.0
+    react-paginate: ^8.2.0
     tailwindcss: ^3.4.3
     type-fest: ^4.6.0
     typescript: ^5.1.6
@@ -9210,7 +9211,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -9949,6 +9950,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-paginate@npm:^8.2.0":
+  version: 8.2.0
+  resolution: "react-paginate@npm:8.2.0"
+  dependencies:
+    prop-types: ^15
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+  checksum: a0969b4ef27be466ef3e052e2c7c61fca60af24e0d10c76770ebd9953ad6131206a276dfc335e61cf35aa494ff3aacc2610682e3192d7f2ee9541928edb46721
+  languageName: node
+  linkType: hard
+
 "react-remove-scroll-bar@npm:^2.3.4":
   version: 2.3.4
   resolution: "react-remove-scroll-bar@npm:2.3.4"
@@ -10391,13 +10403,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "se-2@workspace:."
   dependencies:
-    "@aptos-labs/ts-sdk": ^1.19.0
-    "@aptos-labs/wallet-adapter-ant-design": ^2.4.11
-    "@aptos-labs/wallet-adapter-react": ^3.3.0
-    aptos: ^1.21.0
     husky: ^8.0.1
     lint-staged: ^13.0.3
-    petra-plugin-wallet-adapter: ^0.4.5
   languageName: unknown
   linkType: soft
 

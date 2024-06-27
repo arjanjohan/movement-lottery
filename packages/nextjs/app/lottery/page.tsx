@@ -6,7 +6,7 @@ import { Address } from "~~/components/scaffold-eth";
 import { IntegerInput } from "~~/components/scaffold-eth";
 import { useWallet, InputTransactionData } from "@aptos-labs/wallet-adapter-react";
 import { Aptos, AptosConfig, Network } from "@aptos-labs/ts-sdk";
-import { LOTTERY } from "../../contracts/addresses";
+import { LOTTERY_OLD } from "../../contracts/addresses";
 import { Address as AddressType } from "viem";
 
 export type Buy = {
@@ -66,8 +66,8 @@ const Lottery: NextPage = () => {
     try {
       const lotteryResource = await aptos.getAccountResource(
         {
-          accountAddress:LOTTERY,
-          resourceType:`${LOTTERY}::lottery::Lotts`
+          accountAddress:LOTTERY_OLD,
+          resourceType:`${LOTTERY_OLD}::lottery::Lotts`
         }
       );
       console.log("lotteryResource:", lotteryResource);
@@ -94,7 +94,7 @@ const Lottery: NextPage = () => {
 
     const transaction: InputTransactionData = {
       data: {
-        function: `${LOTTERY}::lottery::place_bet`,
+        function: `${LOTTERY_OLD}::lottery::place_bet`,
         functionArguments: [(BigInt(tokensToBuy) * 100000000n).toString()] // TODO get amount from input
       }
     };
@@ -151,7 +151,7 @@ const Lottery: NextPage = () => {
 
     const transaction: InputTransactionData = {
       data: {
-        function: `${LOTTERY}::lottery::draw_winner`,
+        function: `${LOTTERY_OLD}::lottery::draw_winner`,
         functionArguments: []
       }
     };
@@ -177,7 +177,7 @@ const Lottery: NextPage = () => {
 
     const transaction: InputTransactionData = {
       data: {
-        function: `${LOTTERY}::lottery::draw_winner_random`,
+        function: `${LOTTERY_OLD}::lottery::draw_winner_random`,
         functionArguments: []
       }
     };

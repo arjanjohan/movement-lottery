@@ -11,6 +11,7 @@ module lottery_addr::lottery {
     use 0x1::account;
     use 0x1::randomness;
     use 0x1::simple_map::{Self, SimpleMap};
+    use std::bcs;
     use yield_addr::yield;
 
     /// Error codes
@@ -87,7 +88,8 @@ module lottery_addr::lottery {
         let manager = borrow_global_mut<LotteriesManager>(@lottery_addr);
 
         // Create a new resource account for the lottery
-        let (_, signer_cap) = account::create_resource_account(from, vector::empty());
+        let seed = bcs::to_bytes(&manager.next_lottery_id);
+        let (_, signer_cap) = account::create_resource_account(from, seed);
         let resource_account_signer = account::create_signer_with_capability(&signer_cap);
 
         // Initialize an AptosCoin coin store in the resource account

@@ -49,6 +49,15 @@ Lets any user deposit tokens into the contract. The address and amount is record
 #### withdraw
 Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal. For testing purposes the yield is fixed at 10% upon withdrawal.
 
+## LotteryServiceManager
+This is the AVS contract for the WinWin Lottery. It is used to verify if the lottery contract/owner is using the pool money to earn yield according to the rules set when creating the contract. It verifies the used yield protocol (MOVE address) against a list of approved yield protocols.
+
+#### createNewTask
+Creates a new task on the contract which contains all lottery information, including an array of approved yield protocols (MOVE addresses). Emits a NewTaskCreated event.
+
+#### respondToTask
+Callable by operators registered to this AVS. Takes in a task and a signature containing the address of the yield protocol used by the lottery. The smart contract verifies if the address of the yield protocol exists in the array of approved yield protocol addresses.
+
 ## Next steps
 
 #### Lottery

@@ -2,7 +2,6 @@
   <h1 align="center">🎰 WinWin Lottery on Movement</h1>
   <a href="https://winwin-lottery.vercel.app/">Website</a> |
   <a href="https://github.com/arjanjohan/move-lottery">Repo</a>
-</h4>
   
 ![logo](assets/logo.png)
 </div>
@@ -30,7 +29,7 @@
 ## Contracts
 
 ### Lottery
-The Lottery contract is the core of our dApp. After each sale, there is an x% chance of closing the lottery. This makes the WinWin lottery twice as exciting, because you don't know when the winner will be decided. When the lottery closes, one player is chosen randomly and he receives 100% of the prize pool. During the duration of the lottery, the pool is used to earn yield. Upon closing, the lottery owner/organizer receives this yield.
+The Lottery contract is the core of our dApp. After each ticket sale, the proceeds are send to a yield earning protocol, where the money earns interest for the organizer. When the lottery closes, the money is withdrawn from the yield earning protocol. Then,one player is chosen randomly and he receives 100% of the original prize pool. Any profits made on the yield earning protocol are for the organizer.
 
 #### create_lottery
 Creates a new lottery in exchange for a small fee. Takes in a u64 value between 100 and 200, which is the RTP (Return To Player) percentage. 
@@ -55,7 +54,7 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 #### Lottery
 - Include Aptos randomness module (code is there, but not working on Movement M1 devnet)
 - Display recent ticket sales (cannot read events, no indexer on Movement M1 devnet)
-- Automate closing of lottery
+- Automate the closing of the lottery
   - Based on time, amount or randomness? Have this as option for creator/owner
 
 #### Scaffold-Move
@@ -71,7 +70,8 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 
 #### Presentation
 - [Presentation slides](https://docs.google.com/presentation/d/1OYDtBUJdDUf8DOLzdxWaw5Tu8mV8_wMIrQSRr73XafI/edit?usp=sharing)
-- [Presentation video](TODO)
+- [Presentation video](https://www.loom.com/share/ba038643f748406c96bf1960cfc14f4e?sid=d0902396-0f2d-48b2-8d83-7519b565a6cb)
+
 #### Vercel
 - [Lottery dApp](https://winwin-lottery.vercel.app/)
 - [AVS dashboard](https://winwin-avs.vercel.app/)
@@ -82,7 +82,7 @@ Withdraws all tokens for this user. The total amount is the sum of all deposits 
 
 #### Contracts
 
-- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0xdae25764db6f5f9b6954f3475991a2a97a9f367dba8f110b96b9957c5ed8074f?network=devnet)
+- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x40311704088e14867deda2e4cb49a2606e4fc21df6d7a51226a91ddbd0ba4e78?network=devnet)
 - [Deployed Yield contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
 - [Deployed Lottery AVS on Ethereum Holesky](https://holesky.etherscan.io/address/0x1081ded255574EC1dF6948DfEc3442c54B1De19A)
 

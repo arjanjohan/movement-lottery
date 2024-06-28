@@ -17,7 +17,7 @@ const LotteryDetails = () => {
   // AVS contracts
   const avsContractAddress = externalContracts[17000].LotteryServiceManager.address;
   const abi = externalContracts[17000].LotteryServiceManager.abi;
-  const privateKey = process.env.PRIVATE_KEY || "";
+  const privateKey = process.env.PRIVATE_KEY;
 
 
   const { account, signAndSubmitTransaction } = useWallet();
@@ -29,12 +29,18 @@ const LotteryDetails = () => {
   });
   const aptos = new Aptos(aptosConfig);
 
-  const [lotteryId, setLotteryId] = useState<number>(Number(id)); // TODO: get from router
+  const [lotteryId] = useState<number>(Number(id)); // TODO: get from router
   const [lotteryDetails, setLotteryDetails] = useState<any>(null);
   const [yieldRate, setYieldRate] = useState<number>(0);
 
   const [tokensToBuy, setTokensToBuy] = useState<string | bigint>("");
+  const [avsTaskCreated, setAvsTaskCreated] = useState<boolean>(false);
   const [AvsAproved, setAvsAproved] = useState<boolean>(false);
+
+  const [isPendingBuyTickets, setIsPendingBuyTickets] = useState(false);
+  const [isPendingDrawWinner, setIsPendingDrawWinner] = useState(false);
+  const [isPendingCreateAvsTask, setIsPendingCreateAvsTask] = useState(false);
+  const [isPendingCreateClaimYield, setIsPendingCreateClaimYield] = useState(false);
 
   useEffect(() => {
     fetchYield();
@@ -98,8 +104,9 @@ const LotteryDetails = () => {
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(transaction);
-      // wait for transaction
+      setIsPendingBuyTickets(true);
       await aptos.waitForTransaction({ transactionHash: response.hash });
+      setIsPendingBuyTickets(false);
       fetchLotteryDetails(lotteryId); // Refresh events after placing a bet
     } catch (error: any) {
       console.log("error", error);
@@ -120,13 +127,16 @@ const LotteryDetails = () => {
       const wallet = new ethers.Wallet(privateKey ? privateKey : "", provider);
 
       const contract = new ethers.Contract(avsContractAddress, abi, wallet);
+      setIsPendingCreateAvsTask(true);
 
       const tx = await contract.createNewTask(lotteryId, lotteryDetails.signer_cap.account, [YIELD]);
       await tx.wait();
-      console.log(tx);
+      setAvsTaskCreated(true);
+      setIsPendingCreateAvsTask(false);
       console.log("Task created successfully");
     } catch (error) {
       console.error("Error creating task:", error);
+      setIsPendingCreateAvsTask(false);
     }
   }
 
@@ -145,8 +155,9 @@ const LotteryDetails = () => {
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(transaction);
-      // wait for transaction
+      setIsPendingDrawWinner(true);
       await aptos.waitForTransaction({ transactionHash: response.hash });
+      setIsPendingDrawWinner(false);
       fetchLotteryDetails(lotteryId); // Refresh events after drawing a winner
     } catch (error: any) {
       console.log("error", error);
@@ -166,10 +177,10 @@ const LotteryDetails = () => {
       }
     };
     try {
-      // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(transaction);
-      // wait for transaction
+      setIsPendingCreateClaimYield(true);
       await aptos.waitForTransaction({ transactionHash: response.hash });
+      setIsPendingCreateClaimYield(false);
       fetchLotteryDetails(lotteryId); // Refresh events after claiming yield
     } catch (error: any) {
       console.log("error", error);
@@ -260,7 +271,8 @@ const LotteryDetails = () => {
                 }
               }}
             >
-              Buy Tickets
+              {isPendingBuyTickets && <span className="loading loading-spinner loading-xs"></span>}
+              {isPendingBuyTickets ? "Buying Tickets..." : "Buy Tickets"}
             </button>
           </div>
 
@@ -284,7 +296,10 @@ const LotteryDetails = () => {
               }
             }}
           >
-            Draw winner
+
+              {isPendingDrawWinner && <span className="loading loading-spinner loading-xs"></span>}
+              {isPendingDrawWinner ? "Drawing Winner..." : "Draw Winner"}
+            
           </button>}
         </div>
         <div className="flex flex-col items-center pt-4 max-lg:row-start-1">
@@ -307,6 +322,7 @@ const LotteryDetails = () => {
             <div>
               <button
                 className="btn btn-secondary mt-2"
+                disabled={avsTaskCreated}
                 onClick={async () => {
                   try {
                     await createAvsTask();
@@ -315,7 +331,10 @@ const LotteryDetails = () => {
                   }
                 }}
               >
-                Create AVS Task
+
+              {isPendingCreateAvsTask && <span className="loading loading-spinner loading-xs"></span>}
+              {isPendingCreateAvsTask ? "Creating Task..." : "Create AVS Task"}
+                
               </button>
               
               <button
@@ -329,7 +348,8 @@ const LotteryDetails = () => {
                   }
                 }}
               >
-                Claim Yield
+              {isPendingCreateClaimYield && <span className="loading loading-spinner loading-xs"></span>}
+              {isPendingCreateClaimYield ? "Claiming Yield..." : "Claim Yield"}
               </button>
               </div>}
           </div>

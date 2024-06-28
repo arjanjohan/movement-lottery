@@ -22,6 +22,7 @@ const OverviewPage: NextPage = () => {
   const [returnToPlayer, setReturnToPlayer] = useState(100);
   const [showOpenOnly, setShowOpenOnly] = useState(false);
   const [lotteryCreateFee, setLotteryCreateFee] = useState<number>(20000000);
+  const [isPending, setIsPending] = useState(false)
 
   useEffect(() => {
     fetchLottery();
@@ -47,7 +48,7 @@ const OverviewPage: NextPage = () => {
         winningTicket: lottery.value.winning_ticket,
         rtp: lottery.value.rtp_percentage,
         yieldEarned: lottery.value.yield_earned
-      }));
+      })).reverse(); // Reverse the order of the lotteries
 
       setLotteries(fetchedLotteries);
     } catch (e: any) {
@@ -71,8 +72,9 @@ const OverviewPage: NextPage = () => {
     try {
       // sign and submit transaction to chain
       const response = await signAndSubmitTransaction(transaction);
-      // wait for transaction
+      setIsPending(true);
       await aptos.waitForTransaction({ transactionHash: response.hash });
+      setIsPending(false);
       fetchLottery(); // Refresh lotteries after creating a new one
     } catch (error: any) {
       console.log("error", error);
@@ -120,7 +122,8 @@ const OverviewPage: NextPage = () => {
             }
           }}
         >
-          Create Lottery
+          {isPending && <span className="loading loading-spinner loading-xs"></span>}
+          {isPending ? "Creating Lottery..." : "Create Lottery"}
         </button>
       </div>
       <div className="flex justify-center p-3 m-4  px-4 md:px-0">

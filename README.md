@@ -99,7 +99,7 @@ This is a script for the AVS operator. The script watches for new tasks submitte
 
 #### Contracts
 
-- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x40311704088e14867deda2e4cb49a2606e4fc21df6d7a51226a91ddbd0ba4e78?network=devnet)
+- [Deployed Lottery contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0xa07117682b5fffc9046832f396fd4289f0a38b6925abc63148856b35c80604a8?network=devnet)
 - [Deployed Yield contract on Movement M1](https://explorer.devnet.m1.movementlabs.xyz/account/0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776?network=devnet)
 - [Deployed Lottery AVS on Ethereum Holesky](https://holesky.etherscan.io/address/0x1081ded255574EC1dF6948DfEc3442c54B1De19A)
 

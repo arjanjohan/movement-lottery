@@ -28,7 +28,9 @@
 
 ## Contracts
 
-### Lottery
+
+### [lottery.move](https://github.com/arjanjohan/movement-lottery/blob/c7197d795937307828d028e42ca620f033aa72be/packages/move/lottery/sources/lottery.move)
+
 The Lottery contract is the core of our dApp. After each ticket sale, the proceeds are send to a yield earning protocol, where the money earns interest for the organizer. When the lottery closes, the money is withdrawn from the yield earning protocol. Then,one player is chosen randomly and he receives 100% of the original prize pool. Any profits made on the yield earning protocol are for the organizer.
 
 #### create_lottery
@@ -40,7 +42,8 @@ Swap MOVE tokens for lottery tickets at a 1:1 rate. It takes the amount and lott
 #### draw_winner
 Closes the lottery and randomly determines the winner. Takes a lottery_id as input. After selecting the winner, the lottery pool money is withdrawn from the yield contract and transferred to the player.
 
-### Yield
+### [yield.move](https://github.com/arjanjohan/movement-lottery/blob/c7197d795937307828d028e42ca620f033aa72be/packages/move/yield/sources/yield.move)
+
 The Yield contract serves as an example for the happy flow scenario. It's a very simple (and lucrative) yield generating contract, where each deposit earns 10% upon withdrawal. After deploying the contract, it needs to be funded by the deployer so it can pay the yield. Obviously it's only for testing purposes, to showcase how the lottery works.
 
 #### deposit
@@ -49,7 +52,8 @@ Lets any user deposit tokens into the contract. The address and amount is record
 #### withdraw
 Withdraws all tokens for this user. The total amount is the sum of all deposits and the yield that was generated between the deposit and withdrawal. For testing purposes the yield is fixed at 10% upon withdrawal.
 
-## LotteryServiceManager
+### [LotteryServiceManager.sol](https://github.com/arjanjohan/avs-lottery/blob/afc48c3bf907eed73ddec030c60fd3285792d44a/packages/foundry/contracts/LotteryServiceManager.sol)
+
 This is the AVS contract for the WinWin Lottery. It is used to verify if the lottery contract/owner is using the pool money to earn yield according to the rules set when creating the contract. It verifies the used yield protocol (MOVE address) against a list of approved yield protocols.
 
 #### createNewTask
@@ -57,6 +61,10 @@ Creates a new task on the contract which contains all lottery information, inclu
 
 #### respondToTask
 Callable by operators registered to this AVS. Takes in a task and a signature containing the address of the yield protocol used by the lottery. The smart contract verifies if the address of the yield protocol exists in the array of approved yield protocol addresses.
+
+### [operator/index.ts](https://github.com/arjanjohan/avs-lottery/blob/afc48c3bf907eed73ddec030c60fd3285792d44a/operator/index.ts)
+
+This is a script for the AVS operator. The script watches for new tasks submitted to the AVS. It uses the lotteryId specified in the task to query the Movement M1 blockchain, to see which yield protocol (address) was used by the specified lottery. The operator responds to the task, providing the address of the used yield protocol, after checking if this address exists in the array of allowed yield protocols.
 
 ## Next steps
 

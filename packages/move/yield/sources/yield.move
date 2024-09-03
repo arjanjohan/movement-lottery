@@ -1,5 +1,5 @@
 module yield_addr::yield {
-    use aptos_framework::coin::{Self, Coin, transfer};
+    use aptos_framework::coin::{Self, transfer};
     use aptos_framework::aptos_coin::AptosCoin;
     use std::signer;
     use aptos_framework::account;
@@ -44,7 +44,9 @@ module yield_addr::yield {
     }
 
     /// Allows a user to deposit AptosCoin and records the deposit details.
-    public entry fun deposit(owner: &signer, amount: u64) acquires Yield {
+    public entry fun deposit(owner: &signer, amount: u64)
+     acquires Yield 
+     {
         let owner_addr = signer::address_of(owner);
         let yield_struct = borrow_global_mut<Yield>(@yield_addr);
         let resource_signer = account::create_signer_with_capability(&yield_struct.signer_cap);
@@ -63,7 +65,9 @@ module yield_addr::yield {
     }
 
     /// Allows a user to withdraw their balance along with accrued yield.
-    public entry fun withdraw(owner: &signer) acquires Yield {
+    public entry fun withdraw(owner: &signer)
+     acquires Yield 
+     {
         let owner_addr = signer::address_of(owner);
         let yield_struct = borrow_global_mut<Yield>(@yield_addr);
         let resource_signer = account::create_signer_with_capability(&yield_struct.signer_cap);

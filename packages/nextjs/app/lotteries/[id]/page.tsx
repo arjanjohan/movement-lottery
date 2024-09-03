@@ -23,7 +23,7 @@ const LotteryDetails = () => {
   const { account, signAndSubmitTransaction } = useWallet();
   const aptosConfig = new AptosConfig({
     network: Network.CUSTOM,
-    fullnode: 'https://aptos.devnet.m1.movementlabs.xyz',
+    fullnode: 'https://aptos.testnet.suzuka.movementlabs.xyz/v1',
     indexer: 'https://indexer.devnet.m1.movementlabs.xyz/',
     faucet: 'https://faucet2.movementlabs.xyz'
   });

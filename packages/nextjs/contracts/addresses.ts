@@ -1,2 +1,2 @@
 export const LOTTERY = "0xa07117682b5fffc9046832f396fd4289f0a38b6925abc63148856b35c80604a8";
-export const YIELD = "0x07261beac6e023ed2ba91de8e784c4ae66ef008e62c6ffd989410a7d344fa776";
+export const YIELD = "0x483efcc3335f5eaf91af6b752443b074589dde04df8595937aa161ea9daf7d86";
